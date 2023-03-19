@@ -1,0 +1,45 @@
+import turtle
+
+# Define constants
+WIDTH, HEIGHT = 800, 600
+X_MIN, X_MAX = -2.0, 1.0
+Y_MIN, Y_MAX = -1.5, 1.5
+MAX_ITERATIONS = 50
+COLORS = ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink']
+
+# Set up the turtle screen
+screen = turtle.Screen()
+screen.setup(WIDTH, HEIGHT)
+screen.title('Mandelbrot Fractal')
+screen.tracer(0)
+
+# Define the function to calculate the Mandelbrot set
+def mandelbrot(c):
+    z = 0
+    n = 0
+    while abs(z) <= 2 and n < MAX_ITERATIONS:
+        z = z**2 + c
+        n += 1
+    return n
+
+# Define the main function to draw the Mandelbrot set
+def draw_mandelbrot():
+    turtle.setworldcoordinates(X_MIN, Y_MIN, X_MAX, Y_MAX)
+    for y in range(HEIGHT):
+        for x in range(WIDTH):
+            c = complex(X_MIN + (X_MAX - X_MIN) * x / WIDTH, Y_MIN + (Y_MAX - Y_MIN) * y / HEIGHT)
+            n = mandelbrot(c)
+            color = COLORS[n % len(COLORS)]
+            turtle.penup()
+            turtle.goto(c.real, c.imag)
+            turtle.pendown()
+            turtle.dot(2, color)
+        screen.update()
+
+# Call the main function
+draw_mandelbrot()
+
+# Keep the turtle screen open
+turtle.done()
+
+# CREATED WITH THE HELP OF CHAT-GPT-4:  https://chat.openai.com/chat
