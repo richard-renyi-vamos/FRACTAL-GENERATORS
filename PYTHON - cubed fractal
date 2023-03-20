@@ -1,0 +1,24 @@
+import turtle
+
+def draw_fractal(length, depth):
+    if depth == 0:
+        turtle.forward(length)
+    else:
+        for angle in [0, 90, 180, 270]:
+            draw_fractal(length/3, depth-1)
+            turtle.left(angle)
+            draw_fractal(length/3, depth-1)
+            turtle.right(angle)
+
+# Setup turtle
+turtle.speed(0) # Set the speed to maximum
+turtle.penup()
+turtle.goto(-200, 0)
+turtle.pendown()
+
+# Draw fractal
+draw_fractal(400, 4)
+
+turtle.done()
+
+# CREATED WITH THE HELP OF CHAT-GPT-4: https://chat.openai.com/chat
