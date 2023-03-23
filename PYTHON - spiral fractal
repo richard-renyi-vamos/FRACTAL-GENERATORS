@@ -1,0 +1,16 @@
+import turtle
+
+def spiral(length, angle, increment, depth):
+    if depth == 0:
+        return
+    turtle.forward(length)
+    turtle.right(angle)
+    spiral(length + increment, angle, increment, depth - 1)
+
+turtle.speed('fastest')
+
+spiral(0, 91, 1, 500)
+
+turtle.done()
+
+# CREATED WITH THE HELP OF CHAT-GPT-4:  https://chat.openai.com/chat
