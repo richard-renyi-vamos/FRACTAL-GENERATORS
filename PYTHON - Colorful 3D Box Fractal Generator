@@ -1,76 +1,78 @@
-import matplotlib.pyplot as plt
-import numpy as np
+import pygame
+import math
 
-def generate_cube_fractal(n_iterations=3, x_range=(-1, 1), y_range=(-1, 1), z_range=(-1, 1)):
-    # Define the initial cube vertices
-    vertices = np.array([
-        [-1, -1, -1],
-        [-1, -1, 1],
-        [-1, 1, -1],
-        [-1, 1, 1],
-        [1, -1, -1],
-        [1, -1, 1],
-        [1, 1, -1],
-        [1, 1, 1]
-    ])
-    
-    # Define the initial cube edges
-    edges = np.array([
-        [0, 1],
-        [0, 2],
-        [0, 4],
-        [1, 3],
-        [1, 5],
-        [2, 3],
-        [2, 6],
-        [3, 7],
-        [4, 5],
-        [4, 6],
-        [5, 7],
-        [6, 7]
-    ])
-    
-    # Generate the fractal by iterating through each edge and subdividing it
-    for i in range(n_iterations):
-        new_vertices = []
-        new_edges = []
-        
-        for edge in edges:
-            p1 = vertices[edge[0]]
-            p2 = vertices[edge[1]]
-            new_points = []
-            
-            # Subdivide the edge by adding 4 new vertices and 6 new edges
-            for j in range(4):
-                new_point = (p1 * (3 - j) + p2 * j) / 3
-                new_vertices.append(new_point)
-                new_points.append(len(new_vertices) - 1)
-                
-            new_edges.append([new_points[0], new_points[1]])
-            new_edges.append([new_points[0], new_points[2]])
-            new_edges.append([new_points[0], new_points[3]])
-            new_edges.append([new_points[1], new_points[2]])
-            new_edges.append([new_points[1], new_points[3]])
-            new_edges.append([new_points[2], new_points[3]])
-        
-        vertices = np.array(new_vertices)
-        edges = np.array(new_edges)
-    
-    # Plot the fractal using matplotlib
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    
-    for edge in edges:
-        x = [vertices[edge[0]][0], vertices[edge[1]][0]]
-        y = [vertices[edge[0]][1], vertices[edge[1]][1]]
-        z = [vertices[edge[0]][2], vertices[edge[1]][2]]
-        
-        ax.plot(x, y, z, color='purple')
-    
-    ax.set_xlim(x_range)
-    ax.set_ylim(y_range)
-    ax.set_zlim(z_range)
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
-    plt.show()
+pygame.init()
+
+# Set up the display window
+width = 800
+height = 600
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Box Fractal Zoom Animation")
+
+# Set up the clock
+clock = pygame.time.Clock()
+
+# Define the colors to use
+colors = [
+    (255, 0, 0),   # red
+    (255, 127, 0), # orange
+    (255, 255, 0), # yellow
+    (0, 255, 0),   # green
+    (0, 0, 255),   # blue
+    (75, 0, 130),  # indigo
+    (143, 0, 255), # violet
+]
+
+# Define the starting box size and position
+box_size = 400
+box_x = width / 2 - box_size / 2
+box_y = height / 2 - box_size / 2
+
+# Define the recursive function to draw the box fractal
+def draw_box(x, y, size, depth):
+    if depth == 0:
+        return
+
+    # Draw the box
+    pygame.draw.rect(screen, colors[depth % len(colors)], (x, y, size, size))
+
+    # Recursively draw the four smaller boxes
+    new_size = size / 3
+    draw_box(x, y, new_size, depth - 1)
+    draw_box(x + new_size * 2, y, new_size, depth - 1)
+    draw_box(x, y + new_size * 2, new_size, depth - 1)
+    draw_box(x + new_size * 2, y + new_size * 2, new_size, depth - 1)
+
+# Define the main loop
+running = True
+zoom = 1
+while running:
+    # Handle events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Clear the screen
+    screen.fill((0, 0, 0))
+
+    # Update the box size and position based on the zoom level
+    box_size = 400 / zoom
+    box_x = width / 2 - box_size / 2
+    box_y = height / 2 - box_size / 2
+
+    # Draw the box fractal
+    draw_box(box_x, box_y, box_size, 5)
+
+    # Update the zoom level
+    zoom *= 1.001
+
+    # Display the screen
+    pygame.display.flip()
+
+    # Limit the frame rate
+    clock.tick(60)
+
+pygame.quit()
+
+# UPDATED - DUE TO AN ERROR IT WAS NOT RUNNING - FIXED
+# STILL HAS TO FIX SOME ISSUES, BUT NOW THE ANIMATION RUNS
