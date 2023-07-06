@@ -1,0 +1,30 @@
+import turtle
+
+def draw_fractal(radius, angle, scale):
+    if radius < 1:
+        return
+    turtle.circle(radius)
+    turtle.right(angle)
+    draw_fractal(radius * scale, angle, scale)
+
+# Setup
+turtle.speed(0)
+turtle.bgcolor("black")
+turtle.color("white")
+
+# Starting position and angle
+turtle.up()
+turtle.goto(0, -200)
+turtle.down()
+turtle.setheading(90)
+
+# Generate the fractal
+draw_fractal(200, 120, 0.8)
+
+# Hide turtle
+turtle.hideturtle()
+
+# Keep the window open
+turtle.done()
+
+# CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
