@@ -1,0 +1,41 @@
+import turtle
+
+def draw_hexagon(side_length):
+    for _ in range(6):
+        turtle.forward(side_length)
+        turtle.right(60)
+
+def hexagon_fractal(side_length, depth):
+    if depth == 0:
+        draw_hexagon(side_length)
+    else:
+        for _ in range(6):
+            hexagon_fractal(side_length / 2, depth - 1)
+            turtle.forward(side_length)
+            turtle.right(60)
+
+def main():
+    # Set up the turtle screen
+    turtle.speed(0)  # Fastest drawing speed
+    turtle.bgcolor("white")
+    turtle.title("Hexagon Fractal Generator")
+
+    # Initial position and depth of the fractal
+    initial_side_length = 200
+    fractal_depth = 3
+
+    # Move the turtle to a starting position before drawing
+    turtle.penup()
+    turtle.goto(-initial_side_length / 2, initial_side_length / 2)
+    turtle.pendown()
+
+    # Draw the hexagon fractal
+    hexagon_fractal(initial_side_length, fractal_depth)
+
+    # Keep the window open until manually closed
+    turtle.done()
+
+if __name__ == "__main__":
+    main()
+
+# CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
