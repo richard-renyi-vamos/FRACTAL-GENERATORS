@@ -1,0 +1,50 @@
+import tkinter as tk
+import numpy as np
+from PIL import Image, ImageTk
+
+# Function to generate the Mandelbrot fractal
+def generate_mandelbrot(width, height, x_min, x_max, y_min, y_max, max_iter):
+    image = np.zeros((height, width), dtype=np.uint8)
+    for y in range(height):
+        for x in range(width):
+            zx, zy = x_min + (x / width) * (x_max - x_min), y_min + (y / height) * (y_max - y_min)
+            c = zx + zy * 1j
+            z = c
+            for i in range(max_iter):
+                if abs(z) > 2.0:
+                    break 
+                z = z * z + c
+            # Color the pixel based on the number of iterations
+            color = int((i / max_iter) * 255)
+            image[y, x] = color
+    return image
+
+# Function to update the fractal image
+def update_fractal(complexity):
+    max_iter = int(50 + complexity * 150)  # Adjust this formula as needed
+    fractal_image = generate_mandelbrot(400, 400, -2, 1, -1.5, 1.5, max_iter)
+    photo = ImageTk.PhotoImage(image=Image.fromarray(fractal_image))
+    canvas.create_image(0, 0, image=photo, anchor=tk.NW)
+    canvas.image = photo
+
+# Create the main GUI window
+root = tk.Tk()
+root.title("Fractal Generator")
+
+# Create a canvas for displaying the fractal
+canvas = tk.Canvas(root, width=400, height=400)
+canvas.pack()
+
+# Create a slider for controlling the complexity
+complexity_slider = tk.Scale(root, from_=0, to=1, resolution=0.01, orient=tk.HORIZONTAL,
+                             label="Complexity", command=update_fractal)
+complexity_slider.pack()
+
+# Initialize the fractal with default complexity
+update_fractal(0.5)
+
+# Start the GUI event loop
+root.mainloop()
+
+
+# CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
