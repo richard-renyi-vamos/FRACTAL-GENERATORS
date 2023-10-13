@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fractal Generator</title>
+</head>
+<body>
+    <h1>Fractal Generator</h1>
+    
+    <label for="depth">Depth:</label>
+    <input type="number" id="depth" value="4">
+    
+    <button onclick="generateFractal()">Generate</button>
+    
+    <canvas id="fractalCanvas" width="400" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById('fractalCanvas');
+        const ctx = canvas.getContext('2d');
+        const depthInput = document.getElementById('depth');
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function drawSierpinski(x, y, size, depth) {
+            if (depth === 0) {
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + size, y);
+                ctx.lineTo(x + size / 2, y + (size * Math.sqrt(3) / 2));
+                ctx.closePath();
+                ctx.stroke();
+            } else {
+                const newSize = size / 2;
+                drawSierpinski(x, y, newSize, depth - 1);
+                drawSierpinski(x + newSize, y, newSize, depth - 1);
+                drawSierpinski(x + newSize / 2, y + (newSize * Math.sqrt(3) / 2), newSize, depth - 1);
+            }
+        }
+
+        function generateFractal() {
+            const depth = parseInt(depthInput.value);
+            clearCanvas();
+            drawSierpinski(10, 10, canvas.width - 20, depth);
+        }
+    </script>
+</body>
+</html>
+
+
+# CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
